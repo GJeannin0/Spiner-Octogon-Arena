@@ -8,14 +8,14 @@ public class Menu : Bolt.GlobalEventListener
 {
 	[SerializeField] private GameObject textInput;
 
-	public void StartServer()
-	{
-		BoltLauncher.StartServer();
-	}
-
 	public void StartClient()
 	{
 		BoltLauncher.StartClient();
+	}
+
+	public void StartServer()
+	{
+		BoltLauncher.StartServer();
 	}
 
 	public override void BoltStartDone()
@@ -23,9 +23,6 @@ public class Menu : Bolt.GlobalEventListener
 		if (BoltNetwork.IsServer)
 		{
 			string matchName = textInput.GetComponent<Text>().text;
-			
-			// BoltNetwork.SetServerInfo(matchName, null);
-
 			Bolt.Matchmaking.BoltMatchmaking.CreateSession(matchName, sceneToLoad: "PlayScene");
 		}
 	}
