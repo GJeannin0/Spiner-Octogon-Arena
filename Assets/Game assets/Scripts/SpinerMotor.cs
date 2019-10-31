@@ -13,7 +13,8 @@ public class SpinerMotor : MonoBehaviour
 		public bool dashing;
 	}
 
-	[SerializeField] private float acceleration = 1.5f;
+	[SerializeField] private float ejectSpeed = 1f;
+	[SerializeField] private float acceleration = 2f;
 	[SerializeField] private float velocityDamping = 0.6f;
 	[SerializeField] private float velocityWallBounceDamping = 0.1f;
 	[SerializeField] private float velocityPlayerBounceDamping = 0.15f;
@@ -39,7 +40,7 @@ public class SpinerMotor : MonoBehaviour
 	
 	void Move()
 	{
-		transform.position += _state.velocity;
+		transform.position += _state.velocity * BoltNetwork.FrameDeltaTime;
 	}
 	
 
@@ -72,10 +73,10 @@ public class SpinerMotor : MonoBehaviour
 
 		_newState.velocity -= velocityDamping * _newState.velocity * BoltNetwork.FrameDeltaTime;
 
-		_newState.position = _state.position + _newState.velocity;
+		_newState.position = _state.position + _newState.velocity * BoltNetwork.FrameDeltaTime;
 
 		// Apply movement
-		Move();
+		// Move();
 
 		_state = _newState;
 
@@ -86,7 +87,7 @@ public class SpinerMotor : MonoBehaviour
 	{
 		if(collision.gameObject.tag == "Player")
 		{
-			if (BoltNetwork.IsServer)
+			if (true)
 			{
 				float knockBackMagnitude = collision.gameObject.GetComponent<SpinerMotor>().GetVelocity().magnitude;
 
@@ -99,11 +100,22 @@ public class SpinerMotor : MonoBehaviour
 			}
 		}
 
-		if (collision.gameObject.tag == "Wall")
+		if (collision.gameObject.tag == "Wall")  //BoltNetwork.IsServer
 		{
-			if (BoltNetwork.IsServer)
+			if (true)
 			{
 				knockBack = (_state.velocity.magnitude * collision.gameObject.transform.forward - _state.velocity) * (1 - velocityWallBounceDamping);
+			}
+		}
+	}
+
+	private void OnCollisionStay(Collision collision)
+	{
+		if (collision.gameObject.tag == "Wall")  //BoltNetwork.IsServer
+		{
+			if (true)
+			{
+				knockBack = ((_state.velocity.magnitude+ejectSpeed) * collision.gameObject.transform.forward - _state.velocity) * (1 - velocityWallBounceDamping);
 			}
 		}
 	}

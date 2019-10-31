@@ -70,8 +70,8 @@ public class SpinerController : Bolt.EntityBehaviour<ISpinerState>
 			// apply movement (this runs on both server and client)
 			SpinerMotor.State motorState = _motor.Move(cmd.Input.Forward, cmd.Input.Backward, cmd.Input.Left, cmd.Input.Right, cmd.Input.Dash);
 
+			// apply movement
 			transform.position = motorState.position;
-			
 			
 
 			// copy the motor state to the commands result (this gets sent back to the client)
